@@ -1,19 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import { User } from '../_models';
+﻿import { Component } from '@angular/core';
 
-@Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
-})
-export class HomeComponent implements OnInit {
-  user!: User;
+import { User } from '@app/_models';
+import { AccountService } from '@app/_services';
 
-  constructor(private accountService: AccountService) {
-    this.user = this.accountService.userValue;
-}
-  ngOnInit(): void {
-    // throw new Error('Method not implemented.');
-  }
+@Component({ templateUrl: 'home.component.html' })
+export class HomeComponent {
+    user: User;
 
+    constructor(private accountService: AccountService) {
+        this.user = this.accountService.userValue;
+    }
 }

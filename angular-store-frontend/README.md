@@ -1,8 +1,8 @@
 # Angular Store Frontend
 
-The Frontend client written with the Angular Framework for Makar's Magique Bazaar.
+The Frontend client written with the Angular Framework for Teorkis's Magique Bazaar.
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.0.2.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli). Uses Angular version 10.
 
 ## Development server
 

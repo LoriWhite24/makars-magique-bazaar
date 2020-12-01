@@ -1,28 +1,17 @@
-import { Component } from '@angular/core';
-import { Role } from './_models/role';
-import { User } from './_models/user';
-import { AuthenticationService } from './_services/authentication.service';
+﻿import { Component } from '@angular/core';
 
-@Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
-})
+import { AccountService } from './_services';
+import { User } from './_models';
+
+@Component({ selector: 'app', templateUrl: 'app.component.html' })
 export class AppComponent {
-  title = 'angular-store-frontend';
-  user!: User;
+    user: User;
 
-  constructor(private authenticationService: AuthenticationService) {
-      this.authenticationService.user.subscribe(x => this.user = x);
-  }
+    constructor(private accountService: AccountService) {
+        this.accountService.user.subscribe(x => this.user = x);
+    }
 
-  get isAdmin() {
-      return this.user && this.user.role === Role.Admin;
-  }
-
-  logout() {
-      this.authenticationService.logout();
-  }
-
-
+    logout() {
+        this.accountService.logout();
+    }
 }

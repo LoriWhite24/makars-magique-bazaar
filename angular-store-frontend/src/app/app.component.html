@@ -1,19 +1,50 @@
-﻿<!-- guest nav -->
-<nav class="navbar navbar-expand navbar-dark bg-dark" *ngIf="!user">
-    <div class="navbar-nav">
-        <a class="nav-item nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
-        <!-- <a class="nav-item nav-link" routerLink="/products" routerLinkActive="active">Products</a> -->
+﻿<!DOCTYPE html> 
+<html> 
+  
+<head> 
+        <!-- Including the bootstrap CDN -->
+        <link rel="stylesheet" href= 
+        "https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"> 
+            <script src= 
+        "https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"> 
+            </script> 
+            <script src= 
+        "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"> 
+            </script> 
+            <script src= 
+        "https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"> 
+            </script> 
+            <style> 
+                .navbar-nav { 
+                    margin-left: auto; 
+                }
+                a.nav-item.nav-link{
+                    color: rgba(255,255,255,.75);
+                } 
+                
+            </style> 
+        </head> 
+          
+        <body> 
+  
+<!-- guest nav -->
+<nav class="navbar navbar-expand navbar-dark" *ngIf="!user">
+     <a class="nav-item nav-link" routerLink="/">Home</a> <!--Storefront for guest and user-->
+        <!-- <a class="nav-item nav-link" routerLink="/products" routerLinkActive="active">Products</a> 
+        -->      
+    <ul class="navbar-nav ml-auto">
         <a class="nav-item nav-link" routerLink="/login">Login</a>
         <a class="nav-item nav-link" routerLink="/register">Register</a>
-    </div>
+    </ul>
 </nav>
 
 
 <!-- nav -->
-<nav class="navbar navbar-expand navbar-dark bg-dark" *ngIf="user">
+<nav class="navbar navbar-expand navbar-dark" *ngIf="user">
     <div class="navbar-nav">
-        <a class="nav-item nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
-        <a class="nav-item nav-link" routerLink="/users" routerLinkActive="active">Users</a>
+        <a class="nav-item nav-link" routerLink="/">Profile</a>
+        <a class="nav-item nav-link" routerLink="/admin" *ngIf="isAdmin">Admin</a>
+        <a class="nav-item nav-link" routerLink="/users" *ngIf="isAdmin">Users</a>
         <a class="nav-item nav-link" (click)="logout()">Logout</a>
     </div>
 </nav>
@@ -24,9 +55,11 @@
     <router-outlet></router-outlet>
 </div>
 
+
 <!-- credits -->
 <div class="text-center mt-4">
-    <p>
-        (C) Teorkis's Magique Bazaar
-    </p>
+
+        <footer>(C) Teorkis's Magique Bazaar</footer>
 </div>
+        </body>
+</html>

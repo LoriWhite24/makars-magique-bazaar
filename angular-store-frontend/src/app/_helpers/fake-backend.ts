@@ -2,11 +2,14 @@
 import { HttpRequest, HttpResponse, HttpHandler, HttpEvent, HttpInterceptor, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { delay, materialize, dematerialize } from 'rxjs/operators';
+import { Role } from '@app/_models';
 
 // array in local storage for registered users
-const usersKey = 'angular-10-registration-login-example-users';
-let users = JSON.parse(localStorage.getItem(usersKey)) || [];
-
+const usersKey = 'user';
+let users = JSON.parse(localStorage.getItem(usersKey));
+users = [{ id: 1, username: 'admin', password: 'password', firstName: 'Admin', lastName: 'User',  email: 'adminbazaar@gmail.com', role: Role.Admin },
+{ id: 2, username: 'user', password: 'password', firstName: 'Normal', lastName: 'User', email: 'user@gmail.com', role: Role.User }
+];
 @Injectable()
 export class FakeBackendInterceptor implements HttpInterceptor {
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -19,7 +22,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
                 case url.endsWith('/users/authenticate') && method === 'POST':
                     return authenticate();
                 case url.endsWith('/users/register') && method === 'POST':
-                    return register();
+                     return register();
                 case url.endsWith('/users') && method === 'GET':
                     return getUsers();
                 case url.match(/\/users\/\d+$/) && method === 'GET':
@@ -37,20 +40,20 @@ export class FakeBackendInterceptor implements HttpInterceptor {
         // route functions
 
         function authenticate() {
-            const { username, password } = body;
+            const { username, email, password } = body;
             const user = users.find(x => x.username === username && x.password === password);
             if (!user) return error('Username or password is incorrect');
             return ok({
                 ...basicDetails(user),
-                token: 'fake-jwt-token'
+                token: `fake-jwt-token.${user.id}`
             })
         }
 
         function register() {
             const user = body
 
-            if (users.find(x => x.username === user.username)) {
-                return error('Username "' + user.username + '" is already taken')
+            if (users.find(x => x.username === user.username && x.email === user.email)) {
+                return error('Username/email "' + '" is already taken')
             }
 
             user.id = users.length ? Math.max(...users.map(x => x.id)) + 1 : 1;
@@ -59,13 +62,19 @@ export class FakeBackendInterceptor implements HttpInterceptor {
             return ok();
         }
 
+        
+
         function getUsers() {
-            if (!isLoggedIn()) return unauthorized();
-            return ok(users.map(x => basicDetails(x)));
+            if (!isAdmin()) return unauthorized();
+            return ok(users);
         }
 
         function getUserById() {
             if (!isLoggedIn()) return unauthorized();
+
+              // only admins can access other user records
+              if (!isAdmin() && currentUser().id !== idFromUrl()) return unauthorized();
+
 
             const user = users.find(x => x.id === idFromUrl());
             return ok(basicDetails(user));
@@ -115,12 +124,22 @@ export class FakeBackendInterceptor implements HttpInterceptor {
         }
 
         function basicDetails(user) {
-            const { id, username, firstName, lastName } = user;
-            return { id, username, firstName, lastName };
+            
+            let { id, username, email, role = Role.User, firstName, lastName } = user;
+            return { id, username, email, role, firstName, lastName };
         }
 
         function isLoggedIn() {
             return headers.get('Authorization') === 'Bearer fake-jwt-token';
+        }
+        function isAdmin() {
+            return isLoggedIn() && currentUser().role === Role.Admin;
+        }
+
+        function currentUser() {
+            if (!isLoggedIn()) return;
+            const id = parseInt(headers.get('Authorization').split('.')[1]);
+            return users.find(x => x.id === id);
         }
 
         function idFromUrl() {

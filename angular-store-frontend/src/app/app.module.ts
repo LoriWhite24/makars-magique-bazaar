@@ -13,6 +13,7 @@ import { AlertComponent } from './_components';
 import { HomeComponent } from './home';
 import { AccountModule } from './account/account.module';;
 import { AdminComponent } from './admin/admin.component'
+import { UsersModule } from './users/users.module';
 
 @NgModule({
     imports: [
@@ -20,19 +21,22 @@ import { AdminComponent } from './admin/admin.component'
         ReactiveFormsModule,
         HttpClientModule,
         AppRoutingModule,
-        AccountModule
+        AccountModule,
+        UsersModule
 
     ],
     declarations: [
         AppComponent,
         AlertComponent,
         HomeComponent,
-        AdminComponent    ],
+        AdminComponent
+        ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
         { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
 
         // provider used to create fake backend
+        //comment out and provide Node backend
         fakeBackendProvider
     ],
     bootstrap: [AppComponent]

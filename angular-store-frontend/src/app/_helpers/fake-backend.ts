@@ -5,11 +5,11 @@ import { delay, materialize, dematerialize } from 'rxjs/operators';
 import { Role } from '@app/_models';
 
 // array in local storage for registered users
-const usersKey = 'user';
-let users = JSON.parse(localStorage.getItem(usersKey));
-users = [{ id: 1, username: 'admin', password: 'password', firstName: 'Admin', lastName: 'User',  email: 'adminbazaar@gmail.com', role: Role.Admin },
+const usersKey = 'users';
+let users = [{ id: 1, username: 'admin', password: 'password', firstName: 'Admin', lastName: 'User',  email: 'adminbazaar@gmail.com', role: Role.Admin },
 { id: 2, username: 'user', password: 'password', firstName: 'Normal', lastName: 'User', email: 'user@gmail.com', role: Role.User }
 ];
+
 @Injectable()
 export class FakeBackendInterceptor implements HttpInterceptor {
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -29,8 +29,8 @@ export class FakeBackendInterceptor implements HttpInterceptor {
                     return getUserById();
                 case url.match(/\/users\/\d+$/) && method === 'PUT':
                     return updateUser();
-                case url.match(/\/users\/\d+$/) && method === 'DELETE':
-                    return deleteUser();
+                // case url.match(/\/users\/\d+$/) && method === 'DELETE':
+                //     return deleteUser();
                 default:
                     // pass through any requests not handled above
                     return next.handle(request);
@@ -40,7 +40,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
         // route functions
 
         function authenticate() {
-            const { username, email, password } = body;
+            const { username, password } = body;
             const user = users.find(x => x.username === username && x.password === password);
             if (!user) return error('Username or password is incorrect');
             return ok({
@@ -52,8 +52,8 @@ export class FakeBackendInterceptor implements HttpInterceptor {
         function register() {
             const user = body
 
-            if (users.find(x => x.username === user.username && x.email === user.email)) {
-                return error('Username/email "' + '" is already taken')
+            if (users.find(x => x.username === user.username)) {
+                return error('Username "' + '" is already taken')
             }
 
             user.id = users.length ? Math.max(...users.map(x => x.id)) + 1 : 1;
@@ -125,7 +125,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
 
         function basicDetails(user) {
             
-            let { id, username, email, role = Role.User, firstName, lastName } = user;
+            let { id, username, email, role, firstName, lastName } = user;
             return { id, username, email, role, firstName, lastName };
         }
 

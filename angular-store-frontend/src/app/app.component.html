@@ -22,6 +22,10 @@
                     color: rgba(255,255,255,.75);
                 } 
                 
+                body {
+    background-image: url("../../assets/images/maxresdefault.jpg");
+    background-size: auto;
+  }
             </style> 
         </head> 
           
@@ -33,6 +37,7 @@
         <!-- <a class="nav-item nav-link" routerLink="/products" routerLinkActive="active">Products</a> 
         -->      
     <ul class="navbar-nav ml-auto">
+        <a routerLink="/cart" class="nav-item nav-link">Cart</a>
         <a class="nav-item nav-link" routerLink="/login">Login</a>
         <a class="nav-item nav-link" routerLink="/register">Register</a>
     </ul>
@@ -43,6 +48,7 @@
 <nav class="navbar navbar-expand navbar-dark" *ngIf="user">
     <div class="navbar-nav">
         <a class="nav-item nav-link" routerLink="/">Profile</a>
+        <a class="nav-item nav-link" routerLink="/cart" >Cart</a>
         <a class="nav-item nav-link" routerLink="/admin" *ngIf="isAdmin">Admin</a>
         <a class="nav-item nav-link" routerLink="/users" *ngIf="isAdmin">Users</a>
         <a class="nav-item nav-link" (click)="logout()">Logout</a>
@@ -55,11 +61,7 @@
     <router-outlet></router-outlet>
 </div>
 
-
 <!-- credits -->
-<div class="text-center mt-4">
-
-        <footer>(C) Teorkis's Magique Bazaar</footer>
-</div>
         </body>
+                <footer class="text-center mt-4">(C) Teorkis's Magique Bazaar</footer>
 </html>

@@ -2,9 +2,41 @@
 <h1 *ngIf="!isAddMode">Edit User</h1>
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <div class="form-row">
+
+        
+        <!-- <div class="form-group col">
+            <label for="image">Profile Picture</label>
+            <input (change)="fileChangeEvent()" type="file" name="image" class="form-control" id="image" required placeholder="Upload file...">
+            <bwm-image-upload>
+            </bwm-image-upload>
+          </div> -->
+          <!-- <div class="form-group col">
+
+            <label for="file">Profile Picture</label>
+    
+            <input 
+    
+                formControlName="file"
+    
+                id="file" 
+    
+                type="file" 
+    
+                class="form-control"
+    
+                (change)="onFileChange($event)">
+    
+            <div *ngIf="f.file.touched && f.file.invalid" class="alert alert-danger">
+    
+                <div *ngIf="f.file.errors.required">File is required.</div>
+    
+            </div>
+    
+        </div> -->
+
         <div class="form-group col">
             <label for="firstName">First Name</label>
-            <input type="text" formControlName="firstName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }" />
+            <input type="text" formControlName="firstName" class="form-control" name="firstName" [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }" />
             <div *ngIf="submitted && f.firstName.errors" class="invalid-feedback">
                 <div *ngIf="f.firstName.errors.required">First Name is required</div>
             </div>
@@ -17,12 +49,20 @@
             </div>
         </div>
     </div>
-    <div class="form-row">
         <div class="form-group col">
             <label for="username">Username</label>
             <input type="text" formControlName="username" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
             <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
                 <div *ngIf="f.username.errors.required">Username is required</div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col">
+                <label for="email">Email</label>
+                <input type="email" formControlName="email" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />
+                <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+                    <div *ngIf="f.email.errors.required">Email is required</div>
+                </div>
             </div>
         </div>
         <div class="form-group col">
@@ -36,7 +76,6 @@
                 <div *ngIf="f.password.errors.minlength">Password must be at least 6 characters</div>
             </div>
         </div>
-    </div>
     <div class="form-group">
         <button [disabled]="loading" class="btn btn-primary">
             <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>

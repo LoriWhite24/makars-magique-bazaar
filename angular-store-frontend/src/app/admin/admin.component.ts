@@ -16,8 +16,7 @@ export class AdminComponent implements OnInit {
 
     this.loading = true;
     this.accountService.getAll().pipe(first()).subscribe(users => {
-        this.loading = false;
-        this.users = users;
+    this.users = users;
     });
   }
 
